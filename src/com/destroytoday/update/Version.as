@@ -39,7 +39,6 @@ package com.destroytoday.update
 		
 		public function isNewerThan(version:Version):Boolean
 		{
-			trace(toNumberString(), version.toNumberString());
 			return toNumberString() > version.toNumberString();
 		}
 		
