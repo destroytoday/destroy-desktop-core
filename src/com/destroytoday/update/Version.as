@@ -39,7 +39,7 @@ package com.destroytoday.update
 		
 		public function isNewerThan(version:Version):Boolean
 		{
-			return toNumberString() > version.toNumberString();
+			return toInteger() > version.toInteger();
 		}
 		
 		public function toString():String
@@ -47,17 +47,17 @@ package com.destroytoday.update
 			return _version;
 		}
 		
-		public function toNumberString():String
+		public function toInteger():int
 		{
-			var numberVersion:String = _version;
+			var version:String = _version;
 			
-			if (isPublic) numberVersion += '.3';
-			
-			numberVersion = numberVersion.replace('a', '.0');
-			numberVersion = numberVersion.replace('b', '.1');
-			numberVersion = numberVersion.replace('rc', '.2');
+			if (isAlpha) version = version.replace('a', '.0');
+			if (isBeta) version = version.replace('b', '.1');
+			if (isReleaseCandidate) version = version.replace('rc', '.2');
+			if (isPublic) version += '.3';
+			version = version.replace(/\./g, '');
 
-			return numberVersion;
+			return int(version);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.destroytoday.update
 {
 	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 
 	public class VersionTest
 	{
@@ -42,7 +43,7 @@ package com.destroytoday.update
 		}
 
 		[Test]
-		public function public_release_version_is_valid():void
+		public function public_version_is_valid():void
 		{
 			version = new Version('1.0.0');
 		}
@@ -84,7 +85,7 @@ package com.destroytoday.update
 		}
 		
 		[Test]
-		public function public_release_version_is_public():void
+		public function public_version_is_public():void
 		{
 			version = new Version('1.0.0');
 			
@@ -116,6 +117,38 @@ package com.destroytoday.update
 		}
 		
 		[Test]
+		public function public_version_to_integer_adds_public_code():void
+		{
+			version = new Version('1.0.0');
+
+			assertThat(version.toInteger(), equalTo(1003));
+		}
+		
+		[Test]
+		public function release_candidate_version_to_integer_replaces_rc_with_release_candidate_code():void
+		{
+			version = new Version('1.0.0rc');
+			
+			assertThat(version.toInteger(), equalTo(1002));
+		}
+		
+		[Test]
+		public function beta_version_to_integer_replaces_b_with_beta_code():void
+		{
+			version = new Version('1.0.0b');
+			
+			assertThat(version.toInteger(), equalTo(1001));
+		}
+		
+		[Test]
+		public function alpha_version_to_integer_replaces_a_with_alpha_code():void
+		{
+			version = new Version('1.0.0a');
+			
+			assertThat(version.toInteger(), equalTo(1000));
+		}
+		
+		[Test]
 		public function major_version_is_newer_than_older_major_version():void
 		{
 			version = new Version('2.0.0');
@@ -140,7 +173,7 @@ package com.destroytoday.update
 		}
 		
 		[Test]
-		public function public_release_version_is_newer_than_release_candidate_version():void
+		public function public_version_is_newer_than_release_candidate_version():void
 		{
 			version = new Version('1.0.0');
 			
@@ -161,6 +194,38 @@ package com.destroytoday.update
 			version = new Version('1.0.0b');
 			
 			assertThat(version.isNewerThan(new Version('1.0.0a')));
+		}
+		
+		[Test]
+		public function alpha_version_is_newer_than_older_beta_version():void
+		{
+			version = new Version('1.0.1a');
+			
+			assertThat(version.isNewerThan(new Version('1.0.0b')));
+		}
+		
+		[Test]
+		public function beta_version_is_newer_than_older_release_candidate_version():void
+		{
+			version = new Version('1.0.1b');
+			
+			assertThat(version.isNewerThan(new Version('1.0.0rc')));
+		}
+		
+		[Test]
+		public function release_candidate_version_is_newer_than_older_public_version():void
+		{
+			version = new Version('1.0.1rc');
+			
+			assertThat(version.isNewerThan(new Version('1.0.0')));
+		}
+		
+		[Test]
+		public function double_digit_major_version_is_newer_than_single_digit_major_version():void
+		{
+			version = new Version('10.0.0');
+			
+			assertThat(version.isNewerThan(new Version('9.0.0')));
 		}
 	}
 }
