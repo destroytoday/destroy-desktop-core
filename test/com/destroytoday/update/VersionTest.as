@@ -7,8 +7,20 @@ package com.destroytoday.update
 
 	public class VersionTest
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Properties
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var version:Version;
 
+		//--------------------------------------------------------------------------
+		//
+		//  Prep
+		//
+		//--------------------------------------------------------------------------
+		
 		[Before]
 		public function setUp():void
 		{
@@ -19,6 +31,12 @@ package com.destroytoday.update
 		{
 			version = null;
 		}
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Tests
+		//
+		//--------------------------------------------------------------------------
 
 		[Test(expects="Error")]
 		public function version_throws_error_when_invalid():void
@@ -129,17 +147,17 @@ package com.destroytoday.update
 		[Test]
 		public function minor_version_is_populated_upon_instantiation():void
 		{
-			version = new Version('1.1.0');
+			version = new Version('1.2.0');
 			
-			assertThat(version.minor, equalTo('1'));
+			assertThat(version.minor, equalTo('2'));
 		}
 		
 		[Test]
 		public function patch_version_is_populated_upon_instantiation():void
 		{
-			version = new Version('1.0.1');
+			version = new Version('1.0.2');
 			
-			assertThat(version.patch, equalTo('1'));
+			assertThat(version.patch, equalTo('2'));
 		}
 		
 		[Test]
@@ -247,6 +265,14 @@ package com.destroytoday.update
 		}
 		
 		[Test]
+		public function double_digit_special_version_is_newer_than_single_digit_special_version():void
+		{
+			version = new Version('1.0.0b10');
+
+			assertThat(version.isNewerThan(new Version('1.0.0b9')));
+		}
+		
+		[Test]
 		public function single_digit_major_version_is_newer_than_older_double_digit_minor_version():void
 		{
 			version = new Version('2.0.0');
@@ -255,11 +281,19 @@ package com.destroytoday.update
 		}
 		
 		[Test]
-		public function double_digit_special_version_is_newer_than_single_digit_special_version():void
+		public function version_is_newer_than_older_double_digit_minor_version():void
 		{
-			version = new Version('1.0.0b10');
-
-			assertThat(version.isNewerThan(new Version('1.0.0b9')));
+			version = new Version('2.0.0');
+			
+			assertThat(version.isNewerThan(new Version('1.10.0')));
+		}
+		
+		[Test]
+		public function version_is_newer_than_older_double_digit_patch_version():void
+		{
+			version = new Version('1.1.0');
+			
+			assertThat(version.isNewerThan(new Version('1.0.10')));
 		}
 		
 		[Test]

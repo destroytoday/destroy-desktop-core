@@ -9,12 +9,14 @@
 					   creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
+			import com.destroytoday.model.ApplicationModelTest;
 			import com.destroytoday.update.VersionTest;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
 				testsToRun.push(com.destroytoday.update.VersionTest);
+				testsToRun.push(com.destroytoday.model.ApplicationModelTest);
 				return testsToRun;
 			}
 			

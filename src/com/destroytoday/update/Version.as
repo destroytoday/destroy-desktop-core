@@ -41,7 +41,7 @@ package com.destroytoday.update
 			_version = version;
 			
 			validate();
-			populateParts();
+			populate();
 		}
 		
 		//--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ package com.destroytoday.update
 				throw new Error("Version " + _version + " is invalid.");
 		}
 		
-		protected function populateParts():void
+		protected function populate():void
 		{
 			var partList:Array = _version.match(regex);
 			
