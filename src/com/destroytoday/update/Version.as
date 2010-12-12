@@ -1,63 +1,123 @@
 package com.destroytoday.update
 {
+	import com.destroytoday.model.enum.VersionType;
+
 	public class Version
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Constants
+		//
+		//--------------------------------------------------------------------------
+		
+		protected static const regex:RegExp = /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:(a|b|rc)([0-9]*))?$/;
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Properties
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var _version:String;
+		
+		protected var _major:int;
+		
+		protected var _minor:int;
+		
+		protected var _patch:int;
+		
+		protected var _type:VersionType;
+		
+		protected var _special:int;
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Constructor
+		//
+		//--------------------------------------------------------------------------
 		
 		public function Version(version:String)
 		{
 			_version = version;
 			
 			validate();
+			populateParts();
 		}
 		
-		public function validate():void
+		//--------------------------------------------------------------------------
+		//
+		//  Getters / Setters
+		//
+		//--------------------------------------------------------------------------
+		
+		public function get major():int
 		{
-			if (!/^[0-9]+\.[0-9]+\.[0-9]+(?:(?:a|b|rc)[0-9]*)?$/.test(_version))
+			return _major;
+		}
+		
+		public function get minor():int
+		{
+			return _minor;
+		}
+		
+		public function get patch():int
+		{
+			return _patch;
+		}
+		
+		public function get type():VersionType
+		{
+			return _type;
+		}
+		
+		public function get special():int
+		{
+			return _special;
+		}
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Protected Methods
+		//
+		//--------------------------------------------------------------------------
+		
+		protected function validate():void
+		{
+			if (!regex.test(_version))
 				throw new Error("Version " + _version + " is invalid.");
 		}
 		
-		public function get isPublic():Boolean
+		protected function populateParts():void
 		{
-			return !(isAlpha || isBeta || isReleaseCandidate);
+			var partList:Array = _version.match(regex);
+			
+			_major = int(partList[1]);
+			_minor = int(partList[2]);
+			_patch = int(partList[3]);
+			_type = VersionType.getByAbbrev(partList[4]);
+			_special = int(partList[5]) || 0;
 		}
 		
-		public function get isReleaseCandidate():Boolean
-		{
-			return _version.indexOf('rc') != -1;
-		}
-		
-		public function get isBeta():Boolean
-		{
-			return _version.indexOf('b') != -1;
-		}
-		
-		public function get isAlpha():Boolean
-		{
-			return _version.indexOf('a') != -1;
-		}
+		//--------------------------------------------------------------------------
+		//
+		//  Public Methods
+		//
+		//--------------------------------------------------------------------------
 		
 		public function isNewerThan(version:Version):Boolean
 		{
-			return toInteger() > version.toInteger();
+			return (
+				_major > version.major || 
+				_minor > version.minor || 
+				_patch > version.patch || 
+				_type.priority > version.type.priority || 
+				_special > version.special
+			);
 		}
 		
 		public function toString():String
 		{
 			return _version;
-		}
-		
-		public function toInteger():int
-		{
-			var version:String = _version;
-			
-			if (isAlpha) version = version.replace('a', '.0');
-			if (isBeta) version = version.replace('b', '.1');
-			if (isReleaseCandidate) version = version.replace('rc', '.2');
-			if (isPublic) version += '.3';
-			version = version.replace(/\./g, '');
-
-			return int(version);
 		}
 	}
 }

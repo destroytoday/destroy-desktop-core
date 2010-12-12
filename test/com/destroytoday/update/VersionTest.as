@@ -1,5 +1,7 @@
 package com.destroytoday.update
 {
+	import com.destroytoday.model.enum.VersionType;
+	
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 
@@ -89,7 +91,7 @@ package com.destroytoday.update
 		{
 			version = new Version('1.0.0');
 			
-			assertThat(version.isPublic);
+			assertThat(version.type, equalTo(VersionType.PUBLIC));
 		}
 		
 		[Test]
@@ -97,7 +99,7 @@ package com.destroytoday.update
 		{
 			version = new Version('1.0.0rc');
 			
-			assertThat(version.isReleaseCandidate);
+			assertThat(version.type, equalTo(VersionType.RELEASE_CANDIDATE));
 		}
 		
 		[Test]
@@ -105,7 +107,7 @@ package com.destroytoday.update
 		{
 			version = new Version('1.0.0b');
 			
-			assertThat(version.isBeta);
+			assertThat(version.type, equalTo(VersionType.BETA));
 		}
 		
 		[Test]
@@ -113,39 +115,39 @@ package com.destroytoday.update
 		{
 			version = new Version('1.0.0a');
 			
-			assertThat(version.isAlpha);
+			assertThat(version.type, equalTo(VersionType.ALPHA));
 		}
 		
 		[Test]
-		public function public_version_to_integer_adds_public_code():void
+		public function major_version_is_populated_upon_instantiation():void
 		{
 			version = new Version('1.0.0');
-
-			assertThat(version.toInteger(), equalTo(1003));
+			
+			assertThat(version.major, equalTo('1'));
 		}
 		
 		[Test]
-		public function release_candidate_version_to_integer_replaces_rc_with_release_candidate_code():void
+		public function minor_version_is_populated_upon_instantiation():void
 		{
-			version = new Version('1.0.0rc');
+			version = new Version('1.1.0');
 			
-			assertThat(version.toInteger(), equalTo(1002));
+			assertThat(version.minor, equalTo('1'));
 		}
 		
 		[Test]
-		public function beta_version_to_integer_replaces_b_with_beta_code():void
+		public function patch_version_is_populated_upon_instantiation():void
 		{
-			version = new Version('1.0.0b');
+			version = new Version('1.0.1');
 			
-			assertThat(version.toInteger(), equalTo(1001));
+			assertThat(version.patch, equalTo('1'));
 		}
 		
 		[Test]
-		public function alpha_version_to_integer_replaces_a_with_alpha_code():void
+		public function special_version_is_populated_upon_instantiation():void
 		{
-			version = new Version('1.0.0a');
+			version = new Version('1.0.0b2');
 			
-			assertThat(version.toInteger(), equalTo(1000));
+			assertThat(version.special, equalTo('2'));
 		}
 		
 		[Test]
@@ -226,6 +228,46 @@ package com.destroytoday.update
 			version = new Version('10.0.0');
 			
 			assertThat(version.isNewerThan(new Version('9.0.0')));
+		}
+		
+		[Test]
+		public function double_digit_minor_version_is_newer_than_single_digit_minor_version():void
+		{
+			version = new Version('1.10.0');
+			
+			assertThat(version.isNewerThan(new Version('1.9.0')));
+		}
+		
+		[Test]
+		public function double_digit_patch_version_is_newer_than_single_digit_patch_version():void
+		{
+			version = new Version('1.0.10');
+			
+			assertThat(version.isNewerThan(new Version('1.0.9')));
+		}
+		
+		[Test]
+		public function single_digit_major_version_is_newer_than_older_double_digit_minor_version():void
+		{
+			version = new Version('2.0.0');
+			
+			assertThat(version.isNewerThan(new Version('1.10.0')));
+		}
+		
+		[Test]
+		public function double_digit_special_version_is_newer_than_single_digit_special_version():void
+		{
+			version = new Version('1.0.0b10');
+
+			assertThat(version.isNewerThan(new Version('1.0.0b9')));
+		}
+		
+		[Test]
+		public function version_is_newer_than_older_double_digit_special_version():void
+		{
+			version = new Version('1.0.1');
+			
+			assertThat(version.isNewerThan(new Version('1.0.0b10')));
 		}
 	}
 }
