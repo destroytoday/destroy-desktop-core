@@ -95,7 +95,7 @@ package com.destroytoday.update
 			_minor = int(partList[2]);
 			_patch = int(partList[3]);
 			_type = VersionType.getByAbbrev(partList[4]);
-			_special = int(partList[5]) || 0;
+			_special = int(partList[5]);
 		}
 		
 		//--------------------------------------------------------------------------
