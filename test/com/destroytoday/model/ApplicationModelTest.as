@@ -1,7 +1,7 @@
 package com.destroytoday.model
 {
 	
-	import flash.desktop.NativeApplication;
+	import flash.ui.Keyboard;
 	
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;

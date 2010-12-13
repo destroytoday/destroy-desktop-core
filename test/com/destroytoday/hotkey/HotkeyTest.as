@@ -37,7 +37,7 @@ package com.destroytoday.hotkey
 		[Before(async, timeout=5000)]
 		public function setUp():void
 		{
-			Async.proceedOnEvent(this, prepare(Signal), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(Signal), Event.COMPLETE, 5000);
 		}
 		
 		[After]
