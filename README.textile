@@ -5,3 +5,5 @@ h2. Overview
 Destroy App Core is a library for AIR application development.
 
 h2. Hotkey Support
+
+<script src="https://gist.github.com/744603.js?file=gistfile1.as"></script>
