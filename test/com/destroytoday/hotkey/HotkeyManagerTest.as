@@ -294,5 +294,19 @@ package com.destroytoday.hotkey
 			
 			verify(hotkey.executed);
 		}
+		
+		[Test]
+		public function key_down_does_not_execute_disabled_hotkey():void
+		{
+			manager = new HotkeyManager(os, stage);
+			hotkey = manager.addHotkey(new CharHotkey("@", null, [OSType.MAC]));
+			hotkey.executed = strict(Signal);
+			hotkey.enabled = false;
+			
+			mock(hotkey.executed).method('dispatch').never();
+			dispatchKeyDownEvent(stage, 64);
+			
+			verify(hotkey.executed);
+		}
 	}
 }
