@@ -2,6 +2,7 @@ package com.destroytoday.hotkey
 {
 	import com.destroytoday.environment.OS;
 	import com.destroytoday.model.enum.HotkeyModifier;
+	import com.destroytoday.object.ObjectMap;
 	
 	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
@@ -14,15 +15,9 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
-		protected var _os:OS;
-
 		protected var _stage:Stage;
 
-		protected var hotkeyList:Vector.<IHotkey> = new Vector.<IHotkey>();
-
-		protected var executingCharCodeModifierList:Vector.<HotkeyModifier> = new Vector.<HotkeyModifier>();
-
-		protected var executingKeyCodeModifierList:Vector.<HotkeyModifier> = new Vector.<HotkeyModifier>();
+		protected var hotkeyMap:Object = new Object();
 
 		//--------------------------------------------------------------------------
 		//
@@ -30,9 +25,8 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
-		public function HotkeyManager(os:OS, stage:Stage)
+		public function HotkeyManager(stage:Stage)
 		{
-			_os = os;
 			this.stage = stage;
 		}
 
@@ -53,9 +47,7 @@ package com.destroytoday.hotkey
 				return;
 
 			if (_stage)
-			{
 				_stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			}
 
 			_stage = value;
 
@@ -64,65 +56,32 @@ package com.destroytoday.hotkey
 
 		//--------------------------------------------------------------------------
 		//
-		//  Protected Methods
-		//
-		//--------------------------------------------------------------------------
-
-		protected function populateExecutingModifierLists(event:KeyboardEvent):void
-		{
-			executingCharCodeModifierList.length = 0;
-			executingKeyCodeModifierList.length = 0;
-
-			if (event.altKey)
-				executingKeyCodeModifierList.push(HotkeyModifier.ALTERNATE);
-
-			if (event.commandKey)
-			{
-				executingCharCodeModifierList.push(HotkeyModifier.COMMAND);
-				executingKeyCodeModifierList.push(HotkeyModifier.COMMAND);
-			}
-
-			if (event.controlKey)
-			{
-				executingCharCodeModifierList.push(HotkeyModifier.CONTROL);
-				executingKeyCodeModifierList.push(HotkeyModifier.CONTROL);
-			}
-
-			if (event.shiftKey)
-				executingKeyCodeModifierList.push(HotkeyModifier.SHIFT);
-		}
-
-		//--------------------------------------------------------------------------
-		//
 		//  Public Methods
 		//
 		//--------------------------------------------------------------------------
 
+		public function createHotkey(hotkeyStr:String):IHotkey
+		{
+			return addHotkey(new Hotkey(hotkeyStr));
+		}
+		
 		public function addHotkey(hotkey:IHotkey):IHotkey
 		{
-			if (hotkeyList.indexOf(hotkey) == -1)
-			{
-				hotkeyList[hotkeyList.length] = hotkey;
-			}
-
+			hotkeyMap[hotkey.combination] = hotkey;
+			
 			return hotkey;
 		}
 
 		public function removeHotkey(hotkey:IHotkey):IHotkey
 		{
-			var index:int = hotkeyList.indexOf(hotkey);
-
-			if (index == -1)
-			{
-				hotkeyList.splice(index, 1);
-			}
-
+			delete hotkeyMap[hotkey.combination];
+			
 			return hotkey;
 		}
 
 		public function hasHotkey(hotkey:IHotkey):Boolean
 		{
-			return hotkeyList.indexOf(hotkey) != -1;
+			return hotkeyMap[hotkey.combination];
 		}
 
 		//--------------------------------------------------------------------------
@@ -133,34 +92,34 @@ package com.destroytoday.hotkey
 
 		protected function keyDownHandler(event:KeyboardEvent):void
 		{
-			populateExecutingModifierLists(event);
-
-			var executingCharCodeString:String = String.fromCharCode(event.charCode);
-			var executingKeyCodeString:String = KeycodeHotkey.getStringFromKeyCode(event.keyCode);
-
-			if (executingKeyCodeString)
-				executingKeyCodeString = '{Keyboard.' + executingKeyCodeString +'}';
-
-			if (executingCharCodeModifierList.length > 0)
-				executingCharCodeString = executingCharCodeModifierList.join('+') + '+' + executingCharCodeString;
-
-			if (executingKeyCodeString && executingKeyCodeModifierList.length > 0)
-				executingKeyCodeString = executingKeyCodeModifierList.join('+') + '+' + executingKeyCodeString;
-
-			for each (var hotkey:IHotkey in hotkeyList)
+			var charCodeModifierStr:String = '';
+			var keyCodeModifierStr:String = '';
+			
+			if (event.commandKey)
 			{
-				if ((
-						(hotkey is CharHotkey && String(hotkey) == executingCharCodeString) || 
-						(hotkey is KeycodeHotkey && String(hotkey) == executingKeyCodeString)
-					) && 
-					(hotkey.osTypeList && hotkey.osTypeList.indexOf(_os.type) != -1 || !hotkey.osTypeList) && 
-					hotkey.enabled)
-				{
-					hotkey.execute();
-
-					break;
-				}
+				charCodeModifierStr += "command+";
+				keyCodeModifierStr += "command+";
 			}
+			
+			if (event.controlKey)
+			{
+				charCodeModifierStr += "control+";
+				keyCodeModifierStr += "control+";
+			}
+			
+			if (event.altKey)
+				keyCodeModifierStr += "alt+";
+			
+			if (event.shiftKey)
+				keyCodeModifierStr += "shift+";
+
+			var charCodeCombo:String = charCodeModifierStr + String.fromCharCode(event.charCode);
+			var keyCodeCombo:String = keyCodeModifierStr + String(event.keyCode);
+
+			var hotkey:IHotkey;
+
+			if (((hotkey = hotkeyMap[charCodeCombo]) || (hotkey = hotkeyMap[keyCodeCombo])) && hotkey.enabled)
+				hotkey.execute();
 		}
 	}
 }

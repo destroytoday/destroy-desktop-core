@@ -16,7 +16,7 @@ package com.destroytoday.model.enum
 
 		public static const SHIFT:HotkeyModifier = new HotkeyModifier("shift", Keyboard.SHIFT);
 		
-		public static const ALTERNATE:HotkeyModifier = new HotkeyModifier("alternate", Keyboard.ALTERNATE);
+		public static const ALT:HotkeyModifier = new HotkeyModifier("alt", Keyboard.ALTERNATE);
 		
 		//--------------------------------------------------------------------------
 		//

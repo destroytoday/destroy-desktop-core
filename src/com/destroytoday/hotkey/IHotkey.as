@@ -10,9 +10,9 @@ package com.destroytoday.hotkey
 		function get enabled():Boolean;
 		function set enabled(value:Boolean):void;
 		
-		function get osTypeList():Array;
+		function get combination():String;
+		function set combination(value:String):void;
 		
 		function execute():void;
-		function toString():String;
 	}
 }

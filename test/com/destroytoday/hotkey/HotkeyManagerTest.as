@@ -21,8 +21,6 @@ package com.destroytoday.hotkey
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.core.not;
-	import org.hamcrest.object.equalTo;
-	import org.hamcrest.object.strictlyEqualTo;
 	import org.osflash.signals.Signal;
 
 	public class HotkeyManagerTest
@@ -34,8 +32,6 @@ package com.destroytoday.hotkey
 		//--------------------------------------------------------------------------
 		
 		protected var manager:HotkeyManager;
-		
-		protected var os:OS;
 		
 		protected var stage:Stage;
 		
@@ -50,7 +46,6 @@ package com.destroytoday.hotkey
 		[Before(async, timeout=5000)]
 		public function setUp():void
 		{
-			os = new OS();
 			stage = new NativeWindow(new NativeWindowInitOptions()).stage;
 			
 			Async.proceedOnEvent(this, prepare(OS, Signal), Event.COMPLETE);
@@ -60,7 +55,6 @@ package com.destroytoday.hotkey
 		public function tearDown():void
 		{
 			manager = null;
-			os = null;
 			stage = null;
 			hotkey = null;
 		}
@@ -85,7 +79,7 @@ package com.destroytoday.hotkey
 		[Test]
 		public function manager_listens_for_key_down_when_stage_is_set():void
 		{
-			manager = new HotkeyManager(os, stage);
+			manager = new HotkeyManager(stage);
 			
 			assertThat(stage.hasEventListener(KeyboardEvent.KEY_DOWN));
 		}
@@ -93,7 +87,7 @@ package com.destroytoday.hotkey
 		[Test]
 		public function manager_stops_listening_to_key_down_on_old_stage_when_new_stage_is_set():void
 		{
-			manager = new HotkeyManager(os, stage);
+			manager = new HotkeyManager(stage);
 			var oldStage:Stage = stage;
 			
 			manager.stage = new NativeWindow(new NativeWindowInitOptions()).stage;
@@ -104,8 +98,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function can_add_hotkey_to_list():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = new CharHotkey("@");
+			manager = new HotkeyManager(stage);
+			hotkey = new Hotkey("@");
 			
 			manager.addHotkey(hotkey);
 			
@@ -115,8 +109,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function can_remove_hotkey_from_list():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = new CharHotkey("@");
+			manager = new HotkeyManager(stage);
+			hotkey = new Hotkey("@");
 			
 			manager.addHotkey(hotkey);
 			manager.removeHotkey(hotkey);
@@ -127,8 +121,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_no_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@"));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("@"));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -140,8 +134,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_command_modifier():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@", [HotkeyModifier.COMMAND]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+@"));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -153,8 +147,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_control_modifier():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@", [HotkeyModifier.CONTROL]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("control+@"));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -166,8 +160,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_alt_modifier():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.ALTERNATE]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("alt+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -179,8 +173,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_shift_modifier():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.SHIFT]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("shift+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -192,8 +186,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_command_control_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@", [HotkeyModifier.COMMAND, HotkeyModifier.CONTROL]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+control+@"));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -205,8 +199,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_command_alt_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.COMMAND, HotkeyModifier.ALTERNATE]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+alt+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -218,8 +212,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_command_shift_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.COMMAND, HotkeyModifier.SHIFT]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+shift+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -231,8 +225,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_command_alt_shift_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.COMMAND, HotkeyModifier.ALTERNATE, HotkeyModifier.SHIFT]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+alt+shift+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -244,8 +238,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_control_alt_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.CONTROL, HotkeyModifier.ALTERNATE]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("control+alt+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -257,12 +251,12 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_control_shift_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.CONTROL, HotkeyModifier.SHIFT]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("control+shift+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
-			dispatchKeyDownEvent(stage, 106, Keyboard.J, false, true, false, true);
+			dispatchKeyDownEvent(stage, 0, Keyboard.J, false, true, false, true);
 			
 			verify(hotkey.executed);
 		}
@@ -270,8 +264,8 @@ package com.destroytoday.hotkey
 		[Test]
 		public function key_down_executes_hotkey_with_control_alt_shift_modifiers():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new KeycodeHotkey(Keyboard.J, [HotkeyModifier.CONTROL, HotkeyModifier.ALTERNATE, HotkeyModifier.SHIFT]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("control+alt+shift+" + Keyboard.J));
 			hotkey.executed = strict(Signal);
 			
 			mock(hotkey.executed).method('dispatch').once();
@@ -281,25 +275,10 @@ package com.destroytoday.hotkey
 		}
 		
 		[Test]
-		public function key_down_executes_hotkey_with_specific_os():void
-		{
-			os = nice(OS);
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@", null, [OSType.MAC]));
-			hotkey.executed = strict(Signal);
-			
-			stub(os).getter('type').returns(OSType.MAC);
-			mock(hotkey.executed).method('dispatch').once();
-			dispatchKeyDownEvent(stage, 64);
-			
-			verify(hotkey.executed);
-		}
-		
-		[Test]
 		public function key_down_does_not_execute_disabled_hotkey():void
 		{
-			manager = new HotkeyManager(os, stage);
-			hotkey = manager.addHotkey(new CharHotkey("@", null, [OSType.MAC]));
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("@"));
 			hotkey.executed = strict(Signal);
 			hotkey.enabled = false;
 			
