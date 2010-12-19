@@ -1,8 +1,6 @@
 package com.destroytoday.hotkey
 {
-	import com.destroytoday.environment.OperatingSystem;
-	import com.destroytoday.model.enum.HotkeyModifier;
-	import com.destroytoday.model.enum.OperatingSystemType;
+	import com.destroytoday.model.OperatingSystemModel;
 	
 	import flash.display.NativeWindow;
 	import flash.display.NativeWindowInitOptions;
@@ -12,10 +10,8 @@ package com.destroytoday.hotkey
 	import flash.ui.Keyboard;
 	
 	import mockolate.mock;
-	import mockolate.nice;
 	import mockolate.prepare;
 	import mockolate.strict;
-	import mockolate.stub;
 	import mockolate.verify;
 	
 	import org.flexunit.async.Async;
@@ -49,7 +45,7 @@ package com.destroytoday.hotkey
 		{
 			stage = new NativeWindow(new NativeWindowInitOptions()).stage;
 			
-			Async.proceedOnEvent(this, prepare(OperatingSystem, Signal), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(OperatingSystemModel, Signal), Event.COMPLETE);
 		}
 		
 		[After]
