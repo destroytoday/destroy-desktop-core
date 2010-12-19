@@ -21,7 +21,7 @@ var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
 
 
-h3. Case-sensitivity
+h3. Case-sensitivity and explicit modifiers
 
 <pre>
 // char-based hotkeys are case-sensitive, so
