@@ -14,6 +14,7 @@ To create and add a hotkey to the manager, you can manually instantiate the hotk
 var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
 
 var openHotkey:Hotkey = new Hotkey("command+o");
+
 hotkeyManager.addHotkey(openHotkey);
 </pre>
 
