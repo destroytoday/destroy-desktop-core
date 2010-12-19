@@ -21,10 +21,11 @@ var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 <pre>
 // char-based hotkeys are case-sensitive, so
 new Hotkey("command+f") != new Hotkey("command+F");
-new Hotkey("command+F") == new Hotkey("command+shift+f");
+new Hotkey("command+F") == new Hotkey("command+shift+" + Keyboard.F);
 
-// for case-insensitive hotkeys, use Keyboard keyCodes
+// for modifier-specific hotkeys, use Keyboard keyCodes
 new Hotkey("command+" + Keyboard.F);
+new Hotkey("command+shift+" + Keyboard.F);
 </pre>
 
 <pre>
