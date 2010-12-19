@@ -6,6 +6,7 @@ Destroy App Core is a library for AIR application development.
 
 h2. Hotkeys
 
+h3. Creating a hotkey and adding it to the manager
 <pre>
 var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
 
@@ -18,6 +19,7 @@ hotkeyManager.addHotkey(openHotkey);
 var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
 
+h3. Case-sensitivity
 <pre>
 // char-based hotkeys are case-sensitive, so
 new Hotkey("command+f") != new Hotkey("command+F");
@@ -28,6 +30,7 @@ new Hotkey("command+" + Keyboard.F);
 new Hotkey("command+shift+" + Keyboard.F);
 </pre>
 
+h3. Special characters
 <pre>
 // char-based hotkeys can only have command and control modifiers, 
 // so this throws an error
@@ -41,6 +44,7 @@ new Hotkey("alt+" + Keyboard.G);
 new Hotkey("©");
 </pre>
 
+h3. Numbers
 <pre>
 // don't use char-based hotkeys for numbers, like this
 new Hotkey("command+2");
