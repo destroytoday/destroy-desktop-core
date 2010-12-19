@@ -6,29 +6,37 @@ Destroy App Core is a library for AIR application development.
 
 h2. Hotkeys
 
-h3. Creating a hotkey and adding it to the manager
+h3. Creating and adding
 
+To create and add a hotkey to the manager, you can manually instantiate the hotkey and use the addHotkey method.
 <pre>
 var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
 
-// manually instantiate a hotkey and add it to the manager with
 var openHotkey:Hotkey = new Hotkey("command+o");
 hotkeyManager.addHotkey(openHotkey);
+</pre>
 
-// or use createHotkey to instantiate the hotkey 
-// and automatically add it to the manager
+Or, you can use the createHotkey method to instantiate and automatically add it to the manager in one line.
+
+<pre>
 var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
 
 
-h3. Case-sensitivity and explicit modifiers
+h3. Case-sensitivity
+
+Char-based hotkeys are case-sensitive, as demonstrated with the conditions below:
 
 <pre>
-// char-based hotkeys are case-sensitive, so
 new Hotkey("command+f") != new Hotkey("command+F");
 new Hotkey("command+F") == new Hotkey("command+shift+" + Keyboard.F);
+</pre>
 
-// for modifier-specific hotkeys, use Keyboard keyCodes
+h3. Explicit modifiers
+
+Though you can use 'F' to indicate 'shift+f', you can make your hotkeys more understandable with explicit modifiers and key codes.
+
+<pre>
 new Hotkey("command+" + Keyboard.F);
 new Hotkey("command+shift+" + Keyboard.F);
 </pre>
@@ -36,26 +44,36 @@ new Hotkey("command+shift+" + Keyboard.F);
 
 h3. Special characters
 
+Char-based hotkeys can only use command and control modifiers, so using shift and alt will throw an error.
+
 <pre>
-// char-based hotkeys can only have command and control modifiers, 
-// so this throws an error
+new Hotkey("shift+g");
 new Hotkey("alt+g");
+</pre>
 
-// instead use
+Instead, use key codes.
+
+<pre>
+new Hotkey("shift+" + Keyboard.G);
 new Hotkey("alt+" + Keyboard.G);
+</pre>
 
-// or if the intended hotkey is '©', use this since some
-// keyboards are different and '©' is not alt+g
+Or, if the intended hotkey is '©', use that char, since its hotkey on western keyboard (alt+g) might be different on other keyboards.
+
+<pre>
 new Hotkey("©");
 </pre>
 
 
 h3. Numbers
 
-<pre>
-// don't use char-based hotkeys for numbers, like this
-new Hotkey("command+2");
+Don't use a char-based hotkey for numbers because the number will be treated as a key code.
 
-// instead use Keyboard keyCodes, since 2 is considered a keyCode
-new Hotkey("command+" + Keyboard.NUMBER_2);
+<pre>
+new Hotkey("command+8") == new Hotkey("command+" + Keyboard.BACKSPACE);
+</pre>
+
+Instead, use key codes.
+<pre>
+new Hotkey("command+" + Keyboard.NUMBER_8);
 </pre>
