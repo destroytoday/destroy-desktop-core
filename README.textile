@@ -9,6 +9,7 @@ h2. Hotkeys
 h3. Creating and adding
 
 To create and add a hotkey to the manager, you can manually instantiate the hotkey and use the addHotkey method.
+
 <pre>
 var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
 
@@ -21,7 +22,6 @@ Or, you can use the createHotkey method to instantiate and automatically add it 
 <pre>
 var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
-
 
 h3. Case-sensitivity
 
@@ -40,7 +40,6 @@ Though you can use 'F' to indicate 'shift+f', you can make your hotkeys more und
 new Hotkey("command+" + Keyboard.F);
 new Hotkey("command+shift+" + Keyboard.F);
 </pre>
-
 
 h3. Special characters
 
@@ -64,7 +63,6 @@ Or, if the intended hotkey is '©', use that char, since its hotkey on western k
 new Hotkey("©");
 </pre>
 
-
 h3. Numbers
 
 Don't use a char-based hotkey for numbers because the number will be treated as a key code.
@@ -74,6 +72,7 @@ new Hotkey("command+8") == new Hotkey("command+" + Keyboard.BACKSPACE);
 </pre>
 
 Instead, use key codes.
+
 <pre>
 new Hotkey("command+" + Keyboard.NUMBER_8);
 </pre>
