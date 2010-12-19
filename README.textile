@@ -20,6 +20,7 @@ hotkeyManager.addHotkey(openHotkey);
 var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
 
+
 h3. Case-sensitivity
 
 <pre>
@@ -31,6 +32,7 @@ new Hotkey("command+F") == new Hotkey("command+shift+" + Keyboard.F);
 new Hotkey("command+" + Keyboard.F);
 new Hotkey("command+shift+" + Keyboard.F);
 </pre>
+
 
 h3. Special characters
 
@@ -46,6 +48,7 @@ new Hotkey("alt+" + Keyboard.G);
 // keyboards are different and '©' is not alt+g
 new Hotkey("©");
 </pre>
+
 
 h3. Numbers
 
