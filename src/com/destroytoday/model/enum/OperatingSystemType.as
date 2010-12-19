@@ -1,6 +1,6 @@
 package com.destroytoday.model.enum
 {
-	public class OSType
+	public class OperatingSystemType
 	{
 		//--------------------------------------------------------------------------
 		//
@@ -8,11 +8,11 @@ package com.destroytoday.model.enum
 		//
 		//--------------------------------------------------------------------------
 		
-		public static const MAC:OSType = new OSType("Mac");
+		public static const MAC:OperatingSystemType = new OperatingSystemType("Mac");
 		
-		public static const WINDOWS:OSType = new OSType("Windows");
+		public static const WINDOWS:OperatingSystemType = new OperatingSystemType("Windows");
 		
-		public static const LINUX:OSType = new OSType("Linux");
+		public static const LINUX:OperatingSystemType = new OperatingSystemType("Linux");
 
 		//--------------------------------------------------------------------------
 		//
@@ -28,7 +28,7 @@ package com.destroytoday.model.enum
 		//
 		//--------------------------------------------------------------------------
 		
-		public function OSType(name:String)
+		public function OperatingSystemType(name:String)
 		{
 			_name = name;
 		}

@@ -1,10 +1,10 @@
 package com.destroytoday.environment
 {
-	import com.destroytoday.model.enum.OSType;
+	import com.destroytoday.model.enum.OperatingSystemType;
 	
 	import flash.system.Capabilities;
 
-	public class OS
+	public class OperatingSystem
 	{
 		//--------------------------------------------------------------------------
 		//
@@ -12,7 +12,7 @@ package com.destroytoday.environment
 		//
 		//--------------------------------------------------------------------------
 		
-		protected var _type:OSType;
+		protected var _type:OperatingSystemType;
 		
 		//--------------------------------------------------------------------------
 		//
@@ -20,7 +20,7 @@ package com.destroytoday.environment
 		//
 		//--------------------------------------------------------------------------
 		
-		public function OS()
+		public function OperatingSystem()
 		{
 			populateType();
 		}
@@ -31,7 +31,7 @@ package com.destroytoday.environment
 		//
 		//--------------------------------------------------------------------------
 		
-		public function get type():OSType
+		public function get type():OperatingSystemType
 		{
 			return _type;
 		}
@@ -48,15 +48,15 @@ package com.destroytoday.environment
 			
 			if (os.indexOf('mac os') != -1)
 			{
-				_type = OSType.MAC;
+				_type = OperatingSystemType.MAC;
 			}
 			else if (os.indexOf('windows') != -1)
 			{
-				_type = OSType.WINDOWS;
+				_type = OperatingSystemType.WINDOWS;
 			}
 			else if (os.indexOf('linux') != -1)
 			{
-				_type = OSType.LINUX;
+				_type = OperatingSystemType.LINUX;
 			}
 		}
 		

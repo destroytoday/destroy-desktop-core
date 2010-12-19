@@ -1,6 +1,6 @@
 package com.destroytoday.hotkey
 {
-	import com.destroytoday.environment.OS;
+	import com.destroytoday.environment.OperatingSystem;
 	import com.destroytoday.model.enum.HotkeyModifier;
 	import com.destroytoday.object.ObjectMap;
 	
