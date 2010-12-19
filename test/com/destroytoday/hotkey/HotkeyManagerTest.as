@@ -1,7 +1,5 @@
 package com.destroytoday.hotkey
 {
-	import com.destroytoday.model.OperatingSystemModel;
-	
 	import flash.display.NativeWindow;
 	import flash.display.NativeWindowInitOptions;
 	import flash.display.Stage;
@@ -46,7 +44,7 @@ package com.destroytoday.hotkey
 			manager = new HotkeyManager();
 			stage = new NativeWindow(new NativeWindowInitOptions()).stage;
 			
-			Async.proceedOnEvent(this, prepare(OperatingSystemModel, Signal), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(Signal), Event.COMPLETE);
 		}
 		
 		[After]
