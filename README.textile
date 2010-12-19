@@ -11,7 +11,8 @@ h3. Creating and adding
 To create and add a hotkey to the manager, you can manually instantiate the hotkey and use the addHotkey method.
 
 <pre>
-var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
+var hotkeyManager:HotkeyManager = new HotkeyManager();
+hotkeyManager.addStage(stage);
 
 var openHotkey:Hotkey = new Hotkey("command+o");
 
