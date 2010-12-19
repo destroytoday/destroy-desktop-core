@@ -24,6 +24,18 @@ Or, you can use the createHotkey method to instantiate and automatically add it 
 var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 </pre>
 
+h3. Listening
+
+Hotkeys use signals to indicate they have been executed, so you can listen directly to the signal or you can map it to a command.
+
+<pre>
+hotkeyManager.createHotkey("command+c").executed.add(copyHotkeyHandler);
+</pre>
+
+<pre>
+signalCommandMap.mapSignal(hotkeyManager.createHotkey("command+c").executed, CopyCommand);
+</pre>
+
 h3. Case-sensitivity
 
 Char-based hotkeys are case-sensitive, as demonstrated with the conditions below:
