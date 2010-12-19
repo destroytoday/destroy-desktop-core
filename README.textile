@@ -34,7 +34,7 @@ new Hotkey("command+F") == new Hotkey("command+shift+" + Keyboard.F);
 
 h3. Explicit modifiers
 
-Though you can use 'F' to indicate 'shift+f', you can make your hotkeys more understandable with explicit modifiers and key codes.
+Though you can use 'F' to indicate 'shift+f', you can make your hotkeys easier to understand with explicit modifiers and key codes.
 
 <pre>
 new Hotkey("command+" + Keyboard.F);
