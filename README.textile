@@ -58,7 +58,7 @@ new Hotkey("shift+" + Keyboard.G);
 new Hotkey("alt+" + Keyboard.G);
 </pre>
 
-Or, if the intended hotkey is '©', use that char, since its hotkey on western keyboard (alt+g) might be different on other keyboards.
+Or, if the intended hotkey is '©', use that char, since its hotkey on a western keyboard (alt+g) might be different on other keyboards.
 
 <pre>
 new Hotkey("©");
