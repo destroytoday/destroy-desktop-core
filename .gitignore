@@ -5,7 +5,6 @@
 .git
 .project
 .settings
-.gitignore
 .FlexUnitSettings
 bin
 src/FlexUnitApplication-app.xml
