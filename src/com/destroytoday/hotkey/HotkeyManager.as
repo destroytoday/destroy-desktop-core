@@ -1,6 +1,9 @@
 package com.destroytoday.hotkey
 {
+	import com.destroytoday.object.ObjectMap;
+	
 	import flash.display.Stage;
+	import flash.events.EventDispatcher;
 	import flash.events.KeyboardEvent;
 
 	public class HotkeyManager
@@ -11,7 +14,7 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
-		protected var _stage:Stage;
+		protected var stageMap:ObjectMap = new ObjectMap();
 
 		protected var hotkeyMap:Object = new Object();
 
@@ -21,33 +24,8 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
-		public function HotkeyManager(stage:Stage)
+		public function HotkeyManager()
 		{
-			this.stage = stage;
-		}
-
-		//--------------------------------------------------------------------------
-		//
-		//  Getters / Setters
-		//
-		//--------------------------------------------------------------------------
-
-		public function get stage():Stage
-		{
-			return _stage;
-		}
-
-		public function set stage(value:Stage):void
-		{
-			if (value == _stage)
-				return;
-
-			if (_stage)
-				_stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-
-			_stage = value;
-
-			_stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		}
 
 		//--------------------------------------------------------------------------
@@ -56,6 +34,33 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
+		public function addStage(stage:Stage):Stage
+		{
+			if (hasStage(stage))
+				throw new ArgumentError("Stage has already been added");
+			
+			stageMap.mapValue(stage, true)
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			
+			return stage;
+		}
+		
+		public function removeStage(stage:Stage):Stage
+		{
+			if (!hasStage(stage))
+				throw new ArgumentError("Attempting to remove Stage that hasn't been previously added");
+			
+			stageMap.unmapValue(stage)
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			
+			return stage;
+		}
+		
+		public function hasStage(stage:Stage):Boolean
+		{
+			return stageMap[stage] === true;
+		}
+		
 		public function addHotkeyCombo(combination:String):IHotkey
 		{
 			if (hasHotkeyCombo(combination))
