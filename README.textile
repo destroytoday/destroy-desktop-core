@@ -26,7 +26,7 @@ var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
 
 h3. Listening
 
-Hotkeys use signals to indicate they have been executed, so you can listen directly to the signal or you can map it to a command.
+Hotkeys use signals to indicate they have been executed, so you can listen directly to the signal or map it to a command.
 
 <pre>
 hotkeyManager.createHotkey("command+c").executed.add(copyHotkeyHandler);
