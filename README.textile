@@ -18,10 +18,10 @@ var openHotkey:Hotkey = new Hotkey("command+o");
 hotkeyManager.addHotkey(openHotkey);
 </pre>
 
-Or, you can use the createHotkey method to instantiate and automatically add it to the manager in one line.
+Or, you can use the addHotkeyCombo method to instantiate and automatically add a hotkey to the manager in one line.
 
 <pre>
-var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
+var openHotkey:Hotkey = hotkeyManager.addHotkeyCombo("command+o");
 </pre>
 
 h3. Listening
@@ -29,11 +29,11 @@ h3. Listening
 Hotkeys use signals to indicate they have been executed, so you can listen directly to the signal or map it to a command.
 
 <pre>
-hotkeyManager.createHotkey("command+c").executed.add(copyHotkeyHandler);
+hotkeyManager.addHotkeyCombo("command+c").executed.add(copyHotkeyHandler);
 </pre>
 
 <pre>
-signalCommandMap.mapSignal(hotkeyManager.createHotkey("command+c").executed, CopyCommand);
+signalCommandMap.mapSignal(hotkeyManager.addHotkeyCombo("command+c").executed, CopyCommand);
 </pre>
 
 h3. Case-sensitivity

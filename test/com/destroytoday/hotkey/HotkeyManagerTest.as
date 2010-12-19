@@ -21,6 +21,7 @@ package com.destroytoday.hotkey
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.core.not;
+	import org.hamcrest.object.equalTo;
 	import org.osflash.signals.Signal;
 
 	public class HotkeyManagerTest
@@ -96,10 +97,10 @@ package com.destroytoday.hotkey
 		}
 		
 		[Test]
-		public function can_add_hotkey_to_list():void
+		public function can_add_hotkey():void
 		{
 			manager = new HotkeyManager(stage);
-			hotkey = new Hotkey("@");
+			hotkey = new Hotkey("command+s");
 			
 			manager.addHotkey(hotkey);
 			
@@ -107,15 +108,114 @@ package com.destroytoday.hotkey
 		}
 		
 		[Test]
-		public function can_remove_hotkey_from_list():void
+		public function adding_hotkey_returns_hotkey():void
 		{
 			manager = new HotkeyManager(stage);
-			hotkey = new Hotkey("@");
+			hotkey = new Hotkey("command+s");
+			
+			assertThat(manager.addHotkey(hotkey), equalTo(hotkey));
+		}
+		
+		[Test(expects="ArgumentError")]
+		public function adding_hotkey_when_combination_exists_throws_error():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.addHotkey(new Hotkey("command+s"));
+			manager.addHotkey(new Hotkey("command+s"));
+		}
+		
+		[Test]
+		public function can_remove_hotkey():void
+		{
+			manager = new HotkeyManager(stage);
+			hotkey = new Hotkey("command+s");
 			
 			manager.addHotkey(hotkey);
 			manager.removeHotkey(hotkey);
 			
 			assertThat(not(manager.hasHotkey(hotkey)));
+		}
+		
+		[Test(expects="ArgumentError")]
+		public function removing_hotkey_when_combination_does_not_exist_throws_error():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.removeHotkey(new Hotkey("command+s"));
+		}
+		
+		[Test]
+		public function removing_hotkey_returns_hotkey():void
+		{
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+s"));
+			
+			assertThat(manager.removeHotkey(hotkey), equalTo(hotkey));
+		}
+		
+		[Test]
+		public function can_get_hotkey_with_combination():void
+		{
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("command+s"));
+			
+			assertThat(manager.getHotkey("command+s") is IHotkey);
+		}
+		
+		[Test(expects="ArgumentError")]
+		public function getting_hotkey_when_combination_does_not_exist_throws_error():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.getHotkey("command+s");
+		}
+		
+		[Test]
+		public function can_add_hotkey_combination():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.addHotkeyCombo("command+s");
+			
+			assertThat(manager.hasHotkeyCombo("command+s"));
+		}
+		
+		[Test(expects="ArgumentError")]
+		public function adding_hotkey_combo_when_combination_exists_throws_error():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.addHotkeyCombo("command+s");
+			manager.addHotkeyCombo("command+s");
+		}
+		
+		[Test]
+		public function adding_hotkey_combination_returns_hotkey():void
+		{
+			manager = new HotkeyManager(stage);
+			
+			assertThat(manager.addHotkeyCombo("command+s") is IHotkey);
+		}
+		
+		[Test]
+		public function can_remove_hotkey_combination():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.addHotkeyCombo("command+s");
+			
+			assertThat(not(manager.hasHotkeyCombo("command+s")));
+		}
+		
+		[Test(expects="ArgumentError")]
+		public function removing_hotkey_combo_when_combination_does_not_exist_throws_error():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.removeHotkeyCombo("command+s");
+		}
+		
+		[Test]
+		public function removing_hotkey_combination_returns_hotkey():void
+		{
+			manager = new HotkeyManager(stage);
+			manager.addHotkeyCombo("command+s");
+			
+			assertThat(manager.removeHotkeyCombo("command+s") is IHotkey);
 		}
 		
 		[Test]
@@ -260,7 +360,7 @@ package com.destroytoday.hotkey
 			
 			verify(hotkey.executed);
 		}
-		
+
 		[Test]
 		public function key_down_executes_hotkey_with_control_alt_shift_modifiers():void
 		{
@@ -284,6 +384,32 @@ package com.destroytoday.hotkey
 			
 			mock(hotkey.executed).method('dispatch').never();
 			dispatchKeyDownEvent(stage, 64);
+			
+			verify(hotkey.executed);
+		}
+		
+		[Test]
+		public function char_hotkeys_ignore_shift_modifier():void
+		{
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("F"));
+			hotkey.executed = strict(Signal);
+			
+			mock(hotkey.executed).method('dispatch').once();
+			dispatchKeyDownEvent(stage, 70, 0, false, false, false, true);
+			
+			verify(hotkey.executed);
+		}
+		
+		[Test]
+		public function char_hotkeys_ignore_alt_modifier():void
+		{
+			manager = new HotkeyManager(stage);
+			hotkey = manager.addHotkey(new Hotkey("@"));
+			hotkey.executed = strict(Signal);
+			
+			mock(hotkey.executed).method('dispatch').once();
+			dispatchKeyDownEvent(stage, 64, 0, false, false, true);
 			
 			verify(hotkey.executed);
 		}

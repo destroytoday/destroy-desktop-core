@@ -9,18 +9,12 @@
 					   creationComplete="onCreationComplete()">
 	<fx:Script>
 		<![CDATA[
-			import com.destroytoday.hotkey.HotkeyTest;
-			import com.destroytoday.model.ApplicationModelTest;
-			import com.destroytoday.update.VersionTest;
 			import com.destroytoday.hotkey.HotkeyManagerTest;
 			
 			public function currentRunTestSuite():Array
 			{
 				var testsToRun:Array = new Array();
 				testsToRun.push(com.destroytoday.hotkey.HotkeyManagerTest);
-				testsToRun.push(com.destroytoday.update.VersionTest);
-				testsToRun.push(com.destroytoday.model.ApplicationModelTest);
-				testsToRun.push(com.destroytoday.hotkey.HotkeyTest);
 				return testsToRun;
 			}
 			

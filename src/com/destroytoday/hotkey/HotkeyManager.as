@@ -60,28 +60,60 @@ package com.destroytoday.hotkey
 		//
 		//--------------------------------------------------------------------------
 
-		public function createHotkey(hotkeyStr:String):IHotkey
+		public function addHotkeyCombo(combination:String):IHotkey
 		{
-			return addHotkey(new Hotkey(hotkeyStr));
+			if (hasHotkeyCombo(combination))
+				throw new ArgumentError("A hotkey with combination <" + combination + "> already exists");
+			
+			return (hotkeyMap[combination] = new Hotkey(combination));
+		}
+		
+		public function removeHotkeyCombo(combination:String):IHotkey
+		{
+			if (!hasHotkeyCombo(combination))
+				throw new ArgumentError("Hotkey with combination <" + combination + "> does not exist");
+			
+			var hotkey:IHotkey = getHotkey(combination);
+			
+			delete hotkeyMap[combination];
+			
+			return hotkey;
+		}
+		
+		public function hasHotkeyCombo(combination:String):Boolean
+		{
+			return hotkeyMap[combination] != undefined;
 		}
 		
 		public function addHotkey(hotkey:IHotkey):IHotkey
 		{
-			hotkeyMap[hotkey.combination] = hotkey;
+			if (hasHotkey(hotkey))
+				throw new ArgumentError("A hotkey with combination <" + hotkey.combination + "> already exists");
 			
-			return hotkey;
+			return (hotkeyMap[hotkey.combination] = hotkey);
 		}
 
 		public function removeHotkey(hotkey:IHotkey):IHotkey
 		{
+			if (!hasHotkey(hotkey))
+				throw new ArgumentError("Hotkey with combination <" + hotkey.combination + "> does not exist");
+			
 			delete hotkeyMap[hotkey.combination];
 			
 			return hotkey;
 		}
+		
+		public function getHotkey(combination:String):IHotkey
+		{
+			if (!hasHotkeyCombo(combination))
+				throw new ArgumentError("A hotkey with combination <" + combination + "> does not exist");
+			
+			return hotkeyMap[combination];
+		}
 
 		public function hasHotkey(hotkey:IHotkey):Boolean
 		{
-			return hotkeyMap[hotkey.combination];
+			return hotkeyMap[hotkey.combination] != undefined;
 		}
 
 		//--------------------------------------------------------------------------
