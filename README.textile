@@ -4,4 +4,46 @@ h2. Overview
 
 Destroy App Core is a library for AIR application development.
 
-h2. Hotkey Support
+h2. Hotkeys
+
+<pre>
+var hotkeyManager:HotkeyManager = new HotkeyManager(stage);
+
+// manually instantiate a hotkey and add it to the manager with
+var openHotkey:Hotkey = new Hotkey("command+o");
+hotkeyManager.addHotkey(openHotkey);
+
+// or use createHotkey to instantiate the hotkey 
+// and automatically add it to the manager
+var openHotkey:Hotkey = hotkeyManager.createHotkey("command+o");
+</pre>
+
+<pre>
+// char-based hotkeys are case-sensitive, so
+new Hotkey("command+f") != new Hotkey("command+F");
+new Hotkey("command+F") == new Hotkey("command+shift+f");
+
+// for case-insensitive hotkeys, use Keyboard keyCodes
+new Hotkey("command+" + Keyboard.F);
+</pre>
+
+<pre>
+// char-based hotkeys can only have command and control modifiers, 
+// so this throws an error
+new Hotkey("alt+g");
+
+// instead use
+new Hotkey("alt+" + Keyboard.G);
+
+// or if the intended hotkey is '©', use this since some
+// keyboards are different and '©' is not alt+g
+new Hotkey("©");
+</pre>
+
+<pre>
+// don't use char-based hotkeys for numbers, like this
+new Hotkey("command+2");
+
+// instead use Keyboard keyCodes, since 2 is considered a keyCode
+new Hotkey("command+" + Keyboard.NUMBER_2);
+</pre>
