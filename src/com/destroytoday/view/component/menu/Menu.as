@@ -13,6 +13,19 @@ package com.destroytoday.view.component.menu
 		
 		public function Menu()
 		{
+			addInitialItems();
+			updateItems();
+		}
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Protected Methods
+		//
+		//--------------------------------------------------------------------------
+		
+		protected function addInitialItems():void
+		{
+			
 		}
 		
 		//--------------------------------------------------------------------------
@@ -33,6 +46,11 @@ package com.destroytoday.view.component.menu
 			removeItem(currentItem);
 			
 			return addItemAt(newItem, index);
+		}
+		
+		public function updateItems():void
+		{
+			
 		}
 	}
 }
