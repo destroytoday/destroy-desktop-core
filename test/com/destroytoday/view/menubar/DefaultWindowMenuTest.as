@@ -1,11 +1,25 @@
 package com.destroytoday.view.menubar
 {
+	import com.destroytoday.support.ActiveNativeWindow;
+	
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeMenu;
 	import flash.display.NativeWindow;
+	import flash.display.NativeWindowDisplayState;
 	import flash.display.NativeWindowInitOptions;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.NativeWindowDisplayStateEvent;
 	import flash.ui.Keyboard;
+	
+	import mockolate.ingredients.MockingCouverture;
+	import mockolate.mock;
+	import mockolate.nice;
+	import mockolate.prepare;
+	import mockolate.received;
+	import mockolate.strict;
+	import mockolate.stub;
+	import mockolate.verify;
 	
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
@@ -13,6 +27,7 @@ package com.destroytoday.view.menubar
 	import org.hamcrest.collection.everyItem;
 	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
+	import org.hamcrest.object.hasPropertyWithValue;
 	import org.hamcrest.object.nullValue;
 
 	public class DefaultWindowMenuTest
@@ -33,21 +48,24 @@ package com.destroytoday.view.menubar
 		//
 		//--------------------------------------------------------------------------
 		
-		[Before]
+		[Before(async, timeout=5000)]
 		public function setUp():void
 		{
 			testRunnerWindow = NativeApplication.nativeApplication.openedWindows[0];
 			menu = new DefaultWindowMenu();
+			
+			Async.proceedOnEvent(this,
+		        prepare(NativeWindow, ActiveNativeWindow),
+		        Event.COMPLETE);
 		}
 		
 		[After]
 		public function tearDown():void
 		{
-			var m:int = NativeApplication.nativeApplication.openedWindows.length;
-			
-			for (var i:int = 1; i < m; i++)
+			for each (var window:NativeWindow in NativeApplication.nativeApplication.openedWindows)
 			{
-				(NativeApplication.nativeApplication.openedWindows[i] as NativeWindow).close();
+				if (window != testRunnerWindow)
+					window.close();
 			}
 			
 			testRunnerWindow = null;
@@ -126,6 +144,17 @@ package com.destroytoday.view.menubar
 		}
 		
 		[Test]
+		public function selecting_minimize_item_minimizes_active_window():void
+		{
+			var window:ActiveNativeWindow = nice(ActiveNativeWindow);
+			
+			mock(window).method('close').callsSuper();
+			menu.minimizeItem.dispatchEvent(new Event(Event.SELECT));
+			
+			assertThat(window, received().method('minimize').once());
+		}
+		
+		[Test]
 		public function menu_creates_maximize_item():void
 		{
 			assertThat(menu.maximizeItem, not(nullValue()));
@@ -184,6 +213,30 @@ package com.destroytoday.view.menubar
 		}
 		
 		[Test]
+		public function selecting_maximize_item_maximizes_normal_active_window():void
+		{
+			var window:ActiveNativeWindow = nice(ActiveNativeWindow);
+			
+			mock(window).method('close').callsSuper();
+			stub(window).getter('displayState').returns(NativeWindowDisplayState.NORMAL);
+			menu.maximizeItem.dispatchEvent(new Event(Event.SELECT));
+			
+			assertThat(window, received().method('maximize').once());
+		}
+		
+		[Test]
+		public function selecting_maximize_item_restores_maximized_active_window():void
+		{
+			var window:ActiveNativeWindow = nice(ActiveNativeWindow);
+
+			mock(window).method('close').callsSuper();
+			stub(window).getter('displayState').returns(NativeWindowDisplayState.MAXIMIZED);
+			menu.maximizeItem.dispatchEvent(new Event(Event.SELECT));
+			
+			assertThat(window, received().method('restore').once());
+		}
+		
+		[Test]
 		public function menu_adds_separator_after_maximize_item():void
 		{
 			assertThat(menu.getItemAt(2).isSeparator);
@@ -205,6 +258,28 @@ package com.destroytoday.view.menubar
 		public function menu_adds_bring_all_to_front_item_at_forth_position():void
 		{
 			assertThat(menu.getItemAt(3), equalTo(menu.bringAllToFrontItem));
+		}
+		
+		[Test]
+		public function selecting_bring_all_to_front_item_makes_windows_visible():void
+		{
+			var window:NativeWindow = nice(NativeWindow, null, [new NativeWindowInitOptions()]);
+			
+			mock(window).method('close').callsSuper();
+			menu.bringAllToFrontItem.dispatchEvent(new Event(Event.SELECT));
+			
+			assertThat(window, received().setter('visible').once().arg(true));
+		}
+		
+		[Test]
+		public function selecting_bring_all_to_front_item_brings_windows_to_front():void
+		{
+			var window:NativeWindow = nice(NativeWindow, null, [new NativeWindowInitOptions()]);
+			
+			mock(window).method('close').callsSuper();
+			menu.bringAllToFrontItem.dispatchEvent(new Event(Event.SELECT));
+			
+			assertThat(window, received().method('orderToFront').once());
 		}
 	}
 }

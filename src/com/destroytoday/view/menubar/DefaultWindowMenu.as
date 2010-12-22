@@ -6,6 +6,7 @@ package com.destroytoday.view.menubar
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeMenuItem;
 	import flash.display.NativeWindow;
+	import flash.display.NativeWindowDisplayState;
 	import flash.events.Event;
 	import flash.ui.Keyboard;
 
@@ -31,7 +32,11 @@ package com.destroytoday.view.menubar
 		
 		public function DefaultWindowMenu()
 		{
-			_bringAllToFrontItem.addEventListener(Event.SELECT, bringAllToFrontSelectHandler);
+			addEventListener(Event.DISPLAYING, displayingHandler);
+			
+			minimizeItem.addEventListener(Event.SELECT, minimizeItemSelectHandler);
+			maximizeItem.addEventListener(Event.SELECT, maximizeItemSelectHandler);
+			bringAllToFrontItem.addEventListener(Event.SELECT, bringAllToFrontItemSelectHandler);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -107,7 +112,8 @@ package com.destroytoday.view.menubar
 				NativeApplication.nativeApplication.activeWindow.maximizable);
 			
 			bringAllToFrontItem.enabled = 
-				(NativeApplication.nativeApplication.openedWindows.length > 0);
+				(NativeApplication.nativeApplication.openedWindows &&
+				NativeApplication.nativeApplication.openedWindows.length > 0);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -115,13 +121,40 @@ package com.destroytoday.view.menubar
 		//  Handlers
 		//
 		//--------------------------------------------------------------------------
+
+		protected function displayingHandler(event:Event):void
+		{
+			updateItems();
+		}
 		
-		protected function bringAllToFrontSelectHandler(event:Event):void
+		protected function minimizeItemSelectHandler(event:Event):void
+		{
+			NativeApplication.nativeApplication.activeWindow.minimize();
+		}
+		
+		protected function maximizeItemSelectHandler(event:Event):void
+		{
+			var activeWindow:NativeWindow = NativeApplication.nativeApplication.activeWindow;
+			
+			if (activeWindow.displayState == NativeWindowDisplayState.NORMAL)
+			{
+				activeWindow.maximize();
+			}
+			else
+			{
+				activeWindow.restore();
+			}
+		}
+		
+		protected function bringAllToFrontItemSelectHandler(event:Event):void
 		{
 			var openedWindowList:Array = NativeApplication.nativeApplication.openedWindows;
 			
 			for each (var window:NativeWindow in openedWindowList)
+			{
 				window.orderToFront();
+				window.visible = true;
+			}	
 		}
 	}
 }
