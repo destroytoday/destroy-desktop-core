@@ -1,5 +1,5 @@
-h1. Destroy App Core
+h1. Destroy Desktop Core
 
 h2. Overview
 
-Destroy App Core is a library for AIR application development.
+Destroy Desktop Core is a library for desktop AIR application development.
