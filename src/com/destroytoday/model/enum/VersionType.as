@@ -1,7 +1,7 @@
 package com.destroytoday.model.enum
 {
 
-	public class VersionType
+	public class VersionType implements IVersionType
 	{
 		//--------------------------------------------------------------------------
 		//
@@ -53,12 +53,12 @@ package com.destroytoday.model.enum
 		//
 		//--------------------------------------------------------------------------
 
-		public static function getByName(name:String):VersionType
+		public static function getByName(name:String):IVersionType
 		{
 			return nameMap[name];
 		}
 
-		public static function getByAbbrev(abbrev:String):VersionType
+		public static function getByAbbrev(abbrev:String):IVersionType
 		{
 			return abbrevMap[abbrev || '_'];
 		}

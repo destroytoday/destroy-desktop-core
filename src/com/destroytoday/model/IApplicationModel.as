@@ -1,5 +1,6 @@
 package com.destroytoday.model
 {
+	import com.destroytoday.update.IVersion;
 	import com.destroytoday.update.Version;
 
 	public interface IApplicationModel
@@ -16,8 +17,8 @@ package com.destroytoday.model
 		function get filename():String;
 		function set filename(value:String):void;		
 		
-		function get version():Version;
-		function set version(value:Version):void;
+		function get version():IVersion;
+		function set version(value:IVersion):void;
 		
 		function get url():String;
 		function set url(value:String):void;

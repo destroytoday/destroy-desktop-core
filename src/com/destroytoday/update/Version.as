@@ -1,8 +1,9 @@
 package com.destroytoday.update
 {
+	import com.destroytoday.model.enum.IVersionType;
 	import com.destroytoday.model.enum.VersionType;
 
-	public class Version
+	public class Version implements IVersion
 	{
 		//--------------------------------------------------------------------------
 		//
@@ -26,7 +27,7 @@ package com.destroytoday.update
 		
 		protected var _patch:int;
 		
-		protected var _type:VersionType;
+		protected var _type:IVersionType;
 		
 		protected var _special:int;
 		
@@ -65,7 +66,7 @@ package com.destroytoday.update
 			return _patch;
 		}
 		
-		public function get type():VersionType
+		public function get type():IVersionType
 		{
 			return _type;
 		}
@@ -104,7 +105,7 @@ package com.destroytoday.update
 		//
 		//--------------------------------------------------------------------------
 		
-		public function isNewerThan(version:Version):Boolean
+		public function isNewerThan(version:IVersion):Boolean
 		{
 			return (
 				_major > version.major || 

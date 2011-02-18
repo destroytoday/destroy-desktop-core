@@ -1,5 +1,6 @@
 package com.destroytoday.model
 {
+	import com.destroytoday.update.IVersion;
 	import com.destroytoday.update.Version;
 	
 	import flash.desktop.NativeApplication;
@@ -20,7 +21,7 @@ package com.destroytoday.model
 		
 		protected var _filename:String;
 		
-		protected var _version:Version;
+		protected var _version:IVersion;
 		
 		protected var _url:String;
 		
@@ -108,8 +109,8 @@ package com.destroytoday.model
 		{
 			_filename = value;
 		}
-		
-		public function get version():Version
+
+		public function get version():IVersion
 		{
 			if (!_version)
 			{
@@ -126,7 +127,7 @@ package com.destroytoday.model
 			return _version;
 		}
 		
-		public function set version(value:Version):void
+		public function set version(value:IVersion):void
 		{
 			_version = value;
 		}
