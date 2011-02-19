@@ -1,6 +1,7 @@
 package com.destroytoday
 {
 	import com.destroytoday.model.ApplicationModelTest;
+	import com.destroytoday.update.UpdateTest;
 	import com.destroytoday.update.VersionTest;
 
 	[Suite]
@@ -10,5 +11,6 @@ package com.destroytoday
 		public var applicationModelTest:ApplicationModelTest;
 		
 		public var versionTest:VersionTest;
+		public var updateTest:UpdateTest;
 	}
 }

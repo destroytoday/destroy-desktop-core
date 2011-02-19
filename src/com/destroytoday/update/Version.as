@@ -41,7 +41,7 @@ package com.destroytoday.update
 		{
 			_version = version;
 			
-			validate();
+			verify();
 			populate();
 		}
 		
@@ -82,7 +82,7 @@ package com.destroytoday.update
 		//
 		//--------------------------------------------------------------------------
 		
-		protected function validate():void
+		protected function verify():void
 		{
 			if (!regex.test(_version))
 				throw new Error("Version " + _version + " is invalid.");
