@@ -2,7 +2,6 @@ package com.destroytoday.update
 {
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
-	import org.hamcrest.object.notNullValue;
 
 	public class UpdateTest
 	{		
